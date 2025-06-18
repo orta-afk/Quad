@@ -3,16 +3,21 @@
 Game::Game(){
   initGame();
 }
+
 void Game::initGame(){
   initWindow(); 
+  entity.initEntity();
+  window->setVerticalSyncEnabled(true);
 }
 
 void Game::renderGame(){
   window->clear(sf::Color::Black);
+  entity.renderEntity(*window);
   window->display();  
 }
 
 void Game::updateGame(){
+  entity.updateEntity();
   updatePollEvent();  
 }
 
