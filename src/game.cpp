@@ -7,7 +7,8 @@ Game::Game(){
 void Game::initGame(){
   initWindow(); 
   entity.initEntity();
-  window->setVerticalSyncEnabled(true);
+  window->setFramerateLimit(60);
+  // window->setVerticalSyncEnabled(true);
 }
 
 void Game::renderGame(){
@@ -17,7 +18,8 @@ void Game::renderGame(){
 }
 
 void Game::updateGame(){
-  entity.updateEntity();
+  dt = clock.restart().asSeconds();
+  entity.updateEntity(dt);
   updatePollEvent();  
 }
 

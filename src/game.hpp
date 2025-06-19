@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+#include "SFML/System/Clock.hpp"
 #include "entity.hpp"
 
 class Game {
@@ -18,10 +19,12 @@ public:
   ~Game();
 
 private:
+  sf::Clock clock;
   sf::RenderWindow* window = nullptr;
   const unsigned int width = 800;
   const unsigned int height = 480;
   const char* title = "Quad";
+  float dt;
 
 private:
   void initWindow();
