@@ -3,12 +3,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-#include "SFML/System/Clock.hpp"
 #include "entity.hpp"
+#include "tilemap.hpp"
 
 class Game {
 private:
   Entity entity;
+  Tilemap tilemap;
 
 public:
   Game();
@@ -19,12 +20,15 @@ public:
   ~Game();
 
 private:
-  sf::Clock clock;
-  sf::RenderWindow* window = nullptr;
-  const unsigned int width = 800;
-  const unsigned int height = 480;
-  const char* title = "Quad";
   float dt;
+  int windowPosX;
+  int windowPosY;
+  sf::Clock clock;
+  sf::RenderWindow *window = nullptr;
+  sf::VideoMode videomode;
+  const unsigned int width = 1280;
+  const unsigned int height = 720;
+  const char *title = "Quad";
 
 private:
   void initWindow();

@@ -1,44 +1,47 @@
 #include "game.hpp"
 
-Game::Game(){
+Game::Game() {
   initGame();
+  windowPosX = videomode.getDesktopMode().size.x / 2;
+  windowPosY = videomode.getDesktopMode().size.y / 2;
 }
 
-void Game::initGame(){
-  initWindow(); 
+void Game::initGame() {
+  initWindow();
   entity.initEntity();
-  window->setFramerateLimit(60);
-  // window->setVerticalSyncEnabled(true);
+  tilemap.initTilemap();
+  tilemap.updateTilemap();
+  window->setVerticalSyncEnabled(true);
 }
 
-void Game::renderGame(){
+void Game::renderGame() {
   window->clear(sf::Color::Black);
   entity.renderEntity(*window);
-  window->display();  
+  tilemap.renderTilemap(*window);
+  window->display();
 }
 
-void Game::updateGame(){
+void Game::updateGame() {
   dt = clock.restart().asSeconds();
   entity.updateEntity(dt);
-  updatePollEvent();  
+  updatePollEvent();
 }
 
-const bool Game::isRunning() const {
-  return window->isOpen();
+const bool Game::isRunning() const { return window->isOpen(); }
+
+void Game::initWindow() {
+  window = new sf::RenderWindow(sf::VideoMode({width, height}), title,
+                                sf::Style::Titlebar | sf::Style::Close,
+                                sf::State::Windowed);
+  window->setMouseCursorVisible(false);
 }
 
-void Game::initWindow(){
-  window = new sf::RenderWindow(sf::VideoMode({width, height}), title, sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed);
-}
-
-void Game::updatePollEvent(){
-  while(const std::optional<sf::Event> event = window->pollEvent()){
-    if(event->is<sf::Event::Closed>()){
+void Game::updatePollEvent() {
+  while (const std::optional<sf::Event> event = window->pollEvent()) {
+    if (event->is<sf::Event::Closed>()) {
       window->close();
     }
   }
 }
 
-Game::~Game(){
-  delete window;  
-}
+Game::~Game() { delete window; }
