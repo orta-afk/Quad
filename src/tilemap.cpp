@@ -1,48 +1,55 @@
 #include "tilemap.hpp"
 
-Tilemap::Tilemap() : tile(texture) { initTilemap(); }
+Tilemap::Tilemap() : vert(sf::PrimitiveType::Triangles) { initTilemap(); }
 
 void Tilemap::initTilemap() {
-  if (texture.loadFromFile("../assets/tileset.png", false,
-                           sf::IntRect({XIndex * tileSize, YIndex * tileSize}, {tileSize, tileSize}))) {
+  if (texture.loadFromFile("../assets/tileset.png")) {
     texture.setSmooth(true);
     texture.setRepeated(false);
+  } else {
+    throw std::runtime_error("ong wtf");
   }
-}
-
-void Tilemap::updateTilemap() {
-  int row = texture.getSize().x / tileSize;
-  for (int i = 0; i < mapWidth; i++) {
-    for (int j = 0; j < mapHight; j++) {
-      tilemapTiles id;
-      if (j >= 35 && j <= 37 && i >= 13 && i <= 67){   
-        id = tilemapTiles::ground;
-      } else{
-        id = tilemapTiles::background;
-      }
-      map[i][j] = static_cast<int>(id);
-      switch(id){
-        case tilemapTiles::background:
-          XIndex = 2;
-          YIndex = 0;
-          break;
-        case tilemapTiles::ground:
-          XIndex = 0;
-          YIndex = 0;
-          break;
-      }
-      tile.setTexture(texture);
-      tile.setPosition(sf::Vector2f(static_cast<int>(i * tileSize), static_cast<int>(j * tileSize)));
-      tile.setTextureRect(sf::IntRect({XIndex * tileSize, YIndex * tileSize},
-                                    {tileSize, tileSize}));
-      tiles.push_back(tile);
+  for (int y = 0; y < mapHeight; ++y) {
+    for (int x = 0; x < mapWidth; ++x) {
+      if (y >= 35 && y <= 37 && x >= 13 && x <= 73)
+        map[y][x] = static_cast<int>(tiles::ground);
+      else
+        map[y][x] = static_cast<int>(tiles::backgroundTile);
     }
   }
 }
 
-void Tilemap::renderTilemap(sf::RenderWindow &window) {
-  for (auto &yum : tiles) {
-    window.draw(yum);
+void Tilemap::updateTilemap() {
+  vert.clear();
+  vert.resize(mapWidth * mapHeight * 6);
+
+  int texCols = texture.getSize().x / tileSize;  
+
+  for (int y = 0; y < mapHeight; ++y) {
+    for (int x = 0; x < mapWidth; ++x) {
+      int index = map[y][x];
+      int tu = index % texCols;
+      int tv = index / texCols;
+
+      sf::Vertex *tri = &vert[(x + y * mapWidth) * 6];
+
+      float px = x * tileSize;
+      float py = y * tileSize;
+
+      tri[0].position = {px, py};
+      tri[1].position = {px + tileSize, py};
+      tri[2].position = {px, py + tileSize};
+      tri[3].position = {px, py + tileSize};
+      tri[4].position = {px + tileSize, py};
+      tri[5].position = {px + tileSize, py + tileSize};
+
+      tri[0].texCoords = {static_cast<float>(tu) * tileSize, static_cast<float>(tv) * tileSize};
+      tri[1].texCoords = {(static_cast<float>(tu) + 1) * tileSize, static_cast<float>(tv) * tileSize};
+      tri[2].texCoords = {static_cast<float>(tu) * tileSize, (static_cast<float>(tv) + 1) * tileSize};
+      tri[3].texCoords = {static_cast<float>(tu) * tileSize, (static_cast<float>(tv) + 1) * tileSize};
+      tri[4].texCoords = {(static_cast<float>(tu) + 1) * tileSize, static_cast<float>(tv) * tileSize};
+      tri[5].texCoords = {(static_cast<float>(tu) + 1) * tileSize, (static_cast<float>(tv) + 1) * tileSize};
+    }
   }
 }
 

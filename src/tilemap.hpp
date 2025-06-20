@@ -3,29 +3,31 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <array>
-#include <vector>
 
-enum class tilemapTiles : int {
-  background,
+enum class tiles : int {
+  backgroundTile,
   ground,
 };
 
-class Tilemap {
+class Tilemap : public sf::Drawable, sf::Transform{
 public:
   Tilemap();
   void initTilemap();
   void updateTilemap();
-  void renderTilemap(sf::RenderWindow &window);
   ~Tilemap();
 
 private:
-  int XIndex = 0;
-  int YIndex = 0;
-  int tileSize = 16;
   static const int mapWidth = 80;
-  static const int mapHight = 45;
-  std::array<std::array<int, mapHight>, mapWidth> map;
-  std::vector<sf::Sprite> tiles;
-  sf::Sprite tile;
+  static const int mapHeight = 45;
+  static const int tileSize = 16;
+  std::array<std::array<int, mapWidth>, mapHeight> map;
   sf::Texture texture;
+  sf::VertexArray vert;
+
+private:
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    {
+        states.texture = &texture;
+        target.draw(vert, states);
+    }
 };

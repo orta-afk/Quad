@@ -16,8 +16,8 @@ void Game::initGame() {
 
 void Game::renderGame() {
   window->clear(sf::Color::Black);
+  window->draw(tilemap);
   entity.renderEntity(*window);
-  tilemap.renderTilemap(*window);
   window->display();
 }
 
