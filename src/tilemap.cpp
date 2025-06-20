@@ -1,56 +1,57 @@
 #include "tilemap.hpp"
 
-Tilemap::Tilemap() : vert(sf::PrimitiveType::Triangles) { initTilemap(); }
+Tilemap::Tilemap() : vert(sf::PrimitiveType::Triangles, 3){
+  initTilemap();  
+}
 
-void Tilemap::initTilemap() {
-  if (texture.loadFromFile("../assets/tileset.png")) {
-    texture.setSmooth(true);
+void Tilemap::initTilemap(){
+  if(texture.loadFromFile("../assets/tileset.png")){
+    texture.setSmooth(false);
     texture.setRepeated(false);
-  } else {
-    throw std::runtime_error("ong wtf");
+  }else{
+    throw std::runtime_error("Holy fucking gosh");
   }
-  for (int y = 0; y < mapHeight; ++y) {
-    for (int x = 0; x < mapWidth; ++x) {
-      if (y >= 35 && y <= 37 && x >= 13 && x <= 73)
-        map[y][x] = static_cast<int>(tiles::ground);
-      else
-        map[y][x] = static_cast<int>(tiles::backgroundTile);
+  for(auto& dump : map){
+    dump.fill(static_cast<int>(tiles::background));
+  }
+  for(int i = 0; i < width; i++){
+    for(int j = 0; j < height; j++){
+      if(j >= 37 && j <= 40 && i >= 13 && i <= 73){
+        map[i][j] = static_cast<int>(tiles::ground);   
+      }else{
+        map[i][j] = static_cast<int>(tiles::background);
+      }
     }
   }
 }
 
-void Tilemap::updateTilemap() {
+void Tilemap::updateTilemap(){
   vert.clear();
-  vert.resize(mapWidth * mapHeight * 6);
+  vert.setPrimitiveType(sf::PrimitiveType::Triangles);
+  vert.resize(width * height * 6);
+  for(int i = 0; i < width; i++){
+    for(int j = 0; j < height; j++){      
+      int index = map[i][j];
+      int tu = index % (texture.getSize().x / size);
+      int tv = index / (texture.getSize().x / size);
 
-  int texCols = texture.getSize().x / tileSize;  
+      sf::Vertex* triangles = &vert[(i + j * width) * 6];
 
-  for (int y = 0; y < mapHeight; ++y) {
-    for (int x = 0; x < mapWidth; ++x) {
-      int index = map[y][x];
-      int tu = index % texCols;
-      int tv = index / texCols;
+      triangles[0].position = sf::Vector2f(i * size, j * size);
+      triangles[1].position = sf::Vector2f((i + 1) * size, j * size);
+      triangles[2].position = sf::Vector2f(i * size, (j + 1) * size);
+      triangles[3].position = sf::Vector2f(i * size, (j + 1) * size);
+      triangles[4].position = sf::Vector2f((i + 1) * size, j * size);
+      triangles[5].position = sf::Vector2f((i + 1) * size, (j + 1) * size);
 
-      sf::Vertex *tri = &vert[(x + y * mapWidth) * 6];
-
-      float px = x * tileSize;
-      float py = y * tileSize;
-
-      tri[0].position = {px, py};
-      tri[1].position = {px + tileSize, py};
-      tri[2].position = {px, py + tileSize};
-      tri[3].position = {px, py + tileSize};
-      tri[4].position = {px + tileSize, py};
-      tri[5].position = {px + tileSize, py + tileSize};
-
-      tri[0].texCoords = {static_cast<float>(tu) * tileSize, static_cast<float>(tv) * tileSize};
-      tri[1].texCoords = {(static_cast<float>(tu) + 1) * tileSize, static_cast<float>(tv) * tileSize};
-      tri[2].texCoords = {static_cast<float>(tu) * tileSize, (static_cast<float>(tv) + 1) * tileSize};
-      tri[3].texCoords = {static_cast<float>(tu) * tileSize, (static_cast<float>(tv) + 1) * tileSize};
-      tri[4].texCoords = {(static_cast<float>(tu) + 1) * tileSize, static_cast<float>(tv) * tileSize};
-      tri[5].texCoords = {(static_cast<float>(tu) + 1) * tileSize, (static_cast<float>(tv) + 1) * tileSize};
+      triangles[0].texCoords = sf::Vector2f(tu * size, tv * size);
+      triangles[1].texCoords = sf::Vector2f((tu + 1) * size, tv * size);
+      triangles[2].texCoords = sf::Vector2f(tu * size, (tv + 1) * size);
+      triangles[3].texCoords = sf::Vector2f(tu * size, (tv + 1) * size);
+      triangles[4].texCoords = sf::Vector2f((tu + 1) * size, tv * size);
+      triangles[5].texCoords = sf::Vector2f((tu + 1) * size, (tv + 1) * size);
     }
   }
 }
 
-Tilemap::~Tilemap() {}
+Tilemap::~Tilemap(){}

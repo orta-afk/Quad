@@ -2,14 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <array>
 
-enum class tiles : int {
-  backgroundTile,
-  ground,
+enum class tiles : int{
+  ground = 0,
+  background = 2,
 };
 
-class Tilemap : public sf::Drawable, sf::Transform{
+class Tilemap : public sf::Drawable, sf::Transform {
 public:
   Tilemap();
   void initTilemap();
@@ -17,17 +16,16 @@ public:
   ~Tilemap();
 
 private:
-  static const int mapWidth = 80;
-  static const int mapHeight = 45;
-  static const int tileSize = 16;
-  std::array<std::array<int, mapWidth>, mapHeight> map;
   sf::Texture texture;
   sf::VertexArray vert;
+  static const int width = 80;
+  static const int height = 45;
+  static const int size = 16;
+  std::array<std::array<int, height>, width> map;
 
 private:
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        states.texture = &texture;
-        target.draw(vert, states);
-    }
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override{
+    states.texture = &texture;
+    target.draw(vert, states);
+  }
 };
