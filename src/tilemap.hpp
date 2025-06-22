@@ -18,6 +18,7 @@ public:
 private:
   sf::Texture texture;
   sf::VertexArray vert;
+  sf::FloatRect tilesBoundingBox;
   static const int width = 80;
   static const int height = 45;
   static const int size = 16;

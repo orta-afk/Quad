@@ -4,13 +4,15 @@ Entity::Entity() : player(texture) { initEntity(); }
 
 void Entity::initEntity() { initTexture(); }
 
+void Entity::gravity(float dt){
+  velocity.y += g;
+  if(velocity.y >= max_gravity){
+    velocity.y = max_gravity;
+  }
+}
+
 void Entity::move() {
   velocity = {0, 0};
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::W)) {
-    velocity.y = -speed;
-  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S)) {
-    velocity.y = speed;
-  }
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A)) {
     velocity.x = -speed;
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D)) {
@@ -25,9 +27,9 @@ void Entity::updateEntity(float dt) {
   positions += velocity * dt;
   if (velocity.length() > 0) {
     velocity.x = velocity.normalized().x * speed;
-    velocity.y = velocity.normalized().y * speed;
   }
   move();
+  gravity(dt);
 }
 
 void Entity::renderEntity(sf::RenderWindow &window) { window.draw(player); }
