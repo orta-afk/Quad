@@ -1,11 +1,11 @@
 #include "game.hpp"
 
-int main() {
+int main(){
   Game game;
-  game.initGame();
-  while (game.isRunning()) {
+  game.isRunning();
+  while(game.isRunning()){
     game.updateGame();
     game.renderGame();
-  }
+  }  
   return 0;
 }

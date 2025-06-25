@@ -1,51 +1,43 @@
 #include "entity.hpp"
 
-Entity::Entity() : player(texture) { initEntity(); }
-
-void Entity::initEntity() { initTexture(); }
-
-void Entity::gravity(float dt){
-  velocity.y += g;
-  if(velocity.y >= max_gravity){
-    velocity.y = max_gravity;
-  }
+Entity::Entity() : entitySprite(entityTexture){
+  initEntity();
 }
 
-void Entity::move() {
-  velocity = {0, 0};
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A)) {
-    velocity.x = -speed;
-  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D)) {
-    velocity.x = speed;
-  } else {
-    velocity.x = 0;
-  }
-}
 
-void Entity::updateEntity(float dt) {
-  player.setPosition(sf::Vector2f(positions));
-  positions += velocity * dt;
-  if (velocity.length() > 0) {
-    velocity.x = velocity.normalized().x * speed;
-  }
-  move();
-  gravity(dt);
-}
-
-void Entity::renderEntity(sf::RenderWindow &window) { window.draw(player); }
-
-void Entity::initTexture() {
+void Entity::initEntity(){
+  size = 16;
   XIndex = 1;
   YIndex = 0;
-  if (texture.loadFromFile("../assets/tileset.png", false,
-                           sf::IntRect({tilesize * XIndex, tilesize * YIndex},
-                                       {tilesize, tilesize}))) {
-    player.setTexture(texture);
-    player.setTextureRect(sf::IntRect({tilesize * XIndex, tilesize * YIndex},
-                                      {tilesize, tilesize}));
-    texture.setSmooth(true);
-    texture.setRepeated(false);
-  } else {
-    throw std::runtime_error("fucking hell");
+  sf::Texture* t;
+  t = &tm.loadTexture("../assets/tileset.png", false, size, XIndex , YIndex);
+  entitySprite.setTexture(*t);
+  entitySprite.setTextureRect(sf::IntRect({static_cast<int>(size) * static_cast<int>(XIndex), static_cast<int>(size) * static_cast<int>(YIndex)}, {static_cast<int>(size), static_cast<int>(size)}));
+  entitySprite.setPosition(sf::Vector2f(position));
+  entityTexture = *t;
+}
+
+void Entity::updateEntity(float dt){
+  move();  
+  position += velocity * dt;
+  entitySprite.setPosition(sf::Vector2f(position));
+}
+
+void Entity::move(){
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)){
+    velocity.x = -speed;
+  } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)){
+    velocity.x = speed;
+  }
+  else{
+    velocity.x = 0;
+  }
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
+    velocity.y = -speed;
   }
 }
+
+void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  target.draw(entitySprite);
+}
+

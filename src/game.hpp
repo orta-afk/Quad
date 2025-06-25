@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -7,30 +8,29 @@
 #include "tilemap.hpp"
 
 class Game {
+public:
+  Game();
+  void renderGame();
+  void updateGame();
+  const bool isRunning();
+  ~Game();
+
+public:
+  bool running;
+
+private:
+  void initStuff();
+  void initWindow();
+  void handlePollEvents();
+
+private:
+  sf::Clock clock;
+  const char *title;
+  sf::RenderWindow* window;
+  const unsigned int width;
+  const unsigned int height;
+
 private:
   Entity entity;
   Tilemap tilemap;
-
-public:
-  Game();
-  void initGame();
-  void updateGame();
-  void renderGame();
-  const bool isRunning() const;
-  ~Game();
-
-private:
-  float dt;
-  int windowPosX;
-  int windowPosY;
-  sf::Clock clock;
-  sf::RenderWindow *window = nullptr;
-  sf::VideoMode videomode;
-  const unsigned int width = 1280;
-  const unsigned int height = 720;
-  const char *title = "Quad";
-
-private:
-  void initWindow();
-  void updatePollEvent();
 };
