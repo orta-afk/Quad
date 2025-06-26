@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <cmath>
 
 #include "spriteLoader.hpp"
 
@@ -9,14 +10,20 @@ class Entity : public sf::Drawable, public sf::Transform{
 public:
   Entity();
   void initEntity();
-  void updateEntity(float dt);
+  void updateEntity(float dt, bool collided);
+  virtual sf::FloatRect getEntityBounds();
 
 private:
   virtual void move();
+  virtual void gravity();
+  virtual void resloveCollision(bool isCollided); 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
   
 private:
+  int g = 120;
+  int max_g = 300;
   int speed = 100;
+  bool onGround;
   sf::Vector2f velocity;
   sf::Vector2f position;
   

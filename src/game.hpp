@@ -6,6 +6,7 @@
 
 #include "entity.hpp"
 #include "tilemap.hpp"
+#include "collider.hpp"
 
 class Game {
 public:
@@ -17,6 +18,7 @@ public:
 
 public:
   bool running;
+  bool collided;
 
 private:
   void initStuff();
@@ -33,4 +35,5 @@ private:
 private:
   Entity entity;
   Tilemap tilemap;
+  Collider collider;
 };

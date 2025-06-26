@@ -16,6 +16,7 @@ public:
   Tilemap();
   void initTilemap();
   void makeTile();
+  sf::FloatRect getTilemapBounds();
 
 private:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

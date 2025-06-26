@@ -1,4 +1,5 @@
 #include "tilemap.hpp"
+#include "SFML/Graphics/Rect.hpp"
 
 Tilemap::Tilemap() : vert(sf::PrimitiveType::Triangles, 3){
   initTilemap();
@@ -10,20 +11,19 @@ void Tilemap::initTilemap(){
   for(auto& dump: map){
     dump.fill(static_cast<int>(tiles::background));
   }
-  for(int i = 0; i < mapWidth; ++i){
-    for(int j = 0; j < mapHeight; ++j){
-       int index = map[i][j];
-       for (int i = 0; i < mapWidth; ++i) {
-         for (int j = 0; j < mapHeight; ++j) {
-           if (j >= 25 && j <= 26 && i >= 12 && i <= 32) {
-             map[i][j] = static_cast<int>(tiles::ground);
-           } else {
-             map[i][j] = static_cast<int>(tiles::background);
-           }
-         }
-       }
+  for (int i = 0; i < mapWidth; ++i) {
+    for (int j = 0; j < mapHeight; ++j) {
+      if (j >= 25 && j <= 26 && i >= 4 && i <= 36) {
+        map[i][j] = static_cast<int>(tiles::ground);
+      } else {
+        map[i][j] = static_cast<int>(tiles::background);
+      }
     }
   }
+}
+
+sf::FloatRect Tilemap::getTilemapBounds(){
+  return sf::FloatRect({0,0},{static_cast<float>(tileSize*mapWidth), static_cast<float>(tileSize*mapHeight)});
 }
 
 void Tilemap::makeTile(){

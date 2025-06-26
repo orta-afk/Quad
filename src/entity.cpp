@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include <iostream>
 
 Entity::Entity() : entitySprite(entityTexture){
   initEntity();
@@ -17,10 +18,39 @@ void Entity::initEntity(){
   entityTexture = *t;
 }
 
-void Entity::updateEntity(float dt){
+sf::FloatRect Entity::getEntityBounds(){
+  sf::FloatRect entitybound = entitySprite.getGlobalBounds();
+  return entitybound;
+}
+
+void Entity::resloveCollision(bool isCollided) {
+  if (isCollided) {
+    if (velocity.y > 0) {
+      velocity.y = 0;
+      position.y = std::floor(position.y / size) * size;
+      std::cout << "hly cow";
+    }
+    onGround = true;
+  } else {
+    onGround = false;
+  }
+}
+
+void Entity::updateEntity(float dt, bool collided){
+  gravity();
   move();  
   position += velocity * dt;
   entitySprite.setPosition(sf::Vector2f(position));
+  resloveCollision(collided);
+}
+
+void Entity::gravity(){
+  if(!onGround){
+    velocity.y += g;
+    if(velocity.y > max_g){
+      velocity.y = max_g;
+    }
+  }
 }
 
 void Entity::move(){
