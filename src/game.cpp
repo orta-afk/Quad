@@ -1,14 +1,16 @@
 #include "game.hpp"
-#include <iostream>
 
-Game::Game() : width(720), height(480), title("quad"), window(nullptr){
+Game::Game() : window(nullptr){
+  win.width = 720;
+  win.height = 480;
+  win.title = "Quad";
   initWindow();
   initStuff();
 }
 
 void Game::initWindow(){
   sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-  window = new sf::RenderWindow(sf::VideoMode({width,height}), title, sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed);
+  window = new sf::RenderWindow(sf::VideoMode({win.width,win.height}), win.title, sf::Style::Titlebar | sf::Style::Close, sf::State::Windowed);
   sf::Vector2u windowSize = window->getSize();
   sf::Vector2i centeredPosition(desktopMode.size.x / 2 - windowSize.x / 2,
                                 desktopMode.size.y / 2 - windowSize.y / 2);
@@ -32,7 +34,6 @@ void Game::updateGame(){
   handlePollEvents();
   float dt = clock.restart().asSeconds();
   collided = collider.isCollided();
-  std::cout << "from game.cpp " << collider.isCollided() << std::endl;
   entity.updateEntity(dt, collided);
 }
 

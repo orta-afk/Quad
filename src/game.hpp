@@ -8,6 +8,12 @@
 #include "tilemap.hpp"
 #include "collider.hpp"
 
+struct windowData{
+  std::string title;
+  unsigned int width;
+  unsigned int height;
+};
+
 class Game {
 public:
   Game();
@@ -26,11 +32,9 @@ private:
   void handlePollEvents();
 
 private:
+  windowData win;
   sf::Clock clock;
-  const char *title;
   sf::RenderWindow* window;
-  const unsigned int width;
-  const unsigned int height;
 
 private:
   Entity entity;

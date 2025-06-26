@@ -6,34 +6,38 @@
 
 #include "spriteLoader.hpp"
 
-class Entity : public sf::Drawable, public sf::Transform{
+struct data {
+  int g = 120;
+  int max_g = 300;
+  int speed = 100;
+  bool onGround = false;
+  sf::Vector2f velocity;
+  sf::Vector2f position;
+};
+
+struct texture {
+  unsigned int XIndex = 1;
+  unsigned int YIndex = 0;
+  unsigned int size = 16;
+};
+
+class Entity : public sf::Drawable {
 public:
   Entity();
   void initEntity();
   void updateEntity(float dt, bool collided);
-  virtual sf::FloatRect getEntityBounds();
+  sf::FloatRect getEntityBounds();
 
 private:
-  virtual void move();
-  virtual void gravity();
+  void move();
+  void gravity();
   virtual void resloveCollision(bool isCollided); 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
   
 private:
-  int g = 120;
-  int max_g = 300;
-  int speed = 100;
-  bool onGround;
-  sf::Vector2f velocity;
-  sf::Vector2f position;
-  
-private:
-  unsigned int XIndex;
-  unsigned int YIndex;
-  unsigned int size;
+  data d;
+  texture tex;
+  TextureManger tm;
   sf::Texture entityTexture;
   sf::Sprite entitySprite;
-
-private:
-  TextureManger tm;
 };

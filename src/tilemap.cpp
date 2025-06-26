@@ -1,5 +1,4 @@
 #include "tilemap.hpp"
-#include "SFML/Graphics/Rect.hpp"
 
 Tilemap::Tilemap() : vert(sf::PrimitiveType::Triangles, 3){
   initTilemap();
@@ -8,9 +7,6 @@ Tilemap::Tilemap() : vert(sf::PrimitiveType::Triangles, 3){
 void Tilemap::initTilemap(){
   tilemapTexture = new sf::Texture;
   tilemapTexture = &tm.loadFullTexture("../assets/tileset.png");
-  for(auto& dump: map){
-    dump.fill(static_cast<int>(tiles::background));
-  }
   for (int i = 0; i < mapWidth; ++i) {
     for (int j = 0; j < mapHeight; ++j) {
       if (j >= 25 && j <= 26 && i >= 4 && i <= 36) {

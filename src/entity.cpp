@@ -1,73 +1,72 @@
 #include "entity.hpp"
-#include <iostream>
 
 Entity::Entity() : entitySprite(entityTexture){
   initEntity();
 }
 
+void Entity::initEntity() {
+  tex.size = 16;
+  tex.XIndex = 1;
+  tex.YIndex = 0;
 
-void Entity::initEntity(){
-  size = 16;
-  XIndex = 1;
-  YIndex = 0;
-  sf::Texture* t;
-  t = &tm.loadTexture("../assets/tileset.png", false, size, XIndex , YIndex);
-  entitySprite.setTexture(*t);
-  entitySprite.setTextureRect(sf::IntRect({static_cast<int>(size) * static_cast<int>(XIndex), static_cast<int>(size) * static_cast<int>(YIndex)}, {static_cast<int>(size), static_cast<int>(size)}));
-  entitySprite.setPosition(sf::Vector2f(position));
-  entityTexture = *t;
+  sf::Texture* loadedTex = &tm.loadTexture("../assets/tileset.png", false, tex.size, tex.XIndex, tex.YIndex);
+  entityTexture = *loadedTex;
+  entitySprite.setTexture(entityTexture);
+  entitySprite.setTextureRect(sf::IntRect(
+    {static_cast<int>(tex.size) * static_cast<int>(tex.XIndex),
+     static_cast<int>(tex.size) * static_cast<int>(tex.YIndex)},
+    {static_cast<int>(tex.size), static_cast<int>(tex.size)}
+  ));
+  entitySprite.setPosition(d.position);
 }
 
-sf::FloatRect Entity::getEntityBounds(){
-  sf::FloatRect entitybound = entitySprite.getGlobalBounds();
-  return entitybound;
+sf::FloatRect Entity::getEntityBounds() {
+  return entitySprite.getGlobalBounds();
 }
 
 void Entity::resloveCollision(bool isCollided) {
   if (isCollided) {
-    if (velocity.y > 0) {
-      velocity.y = 0;
-      position.y = std::floor(position.y / size) * size;
-      std::cout << "hly cow";
+    if (d.velocity.y > 0) {
+      d.velocity.y = 0;
+      d.position.y = std::floor(d.position.y / tex.size) * tex.size;
     }
-    onGround = true;
+    d.onGround = true;
   } else {
-    onGround = false;
+    d.onGround = false;
   }
 }
 
-void Entity::updateEntity(float dt, bool collided){
+void Entity::updateEntity(float dt, bool collided) {
   gravity();
-  move();  
-  position += velocity * dt;
-  entitySprite.setPosition(sf::Vector2f(position));
+  move();
+  d.position += d.velocity * dt;
+  entitySprite.setPosition(d.position);
   resloveCollision(collided);
 }
 
-void Entity::gravity(){
-  if(!onGround){
-    velocity.y += g;
-    if(velocity.y > max_g){
-      velocity.y = max_g;
+void Entity::gravity() {
+  if (!d.onGround) {
+    d.velocity.y += d.g;
+    if (d.velocity.y > d.max_g) {
+      d.velocity.y = d.max_g;
     }
   }
 }
 
-void Entity::move(){
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)){
-    velocity.x = -speed;
-  } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)){
-    velocity.x = speed;
+void Entity::move() {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+    d.velocity.x = -d.speed;
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+    d.velocity.x = d.speed;
+  } else {
+    d.velocity.x = 0;
   }
-  else{
-    velocity.x = 0;
-  }
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
-    velocity.y = -speed;
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+    d.velocity.y = -d.speed;
   }
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(entitySprite);
+  target.draw(entitySprite, states);
 }
-
