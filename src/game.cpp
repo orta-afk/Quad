@@ -19,6 +19,7 @@ void Game::initWindow(){
 
 void Game::initStuff(){
   entity.initEntity();  
+  collider.initCollider();
   tilemap.initTilemap();
   tilemap.makeTile();
 }

@@ -1,8 +1,24 @@
 #include "collider.hpp"
 
-bool Collider::isCollided() {
-  if (entity.getEntityBounds().findIntersection(tilemap.getTilemapBounds())) {
-    return true;
-  } 
-  return false;
+Collider::Collider(){
+  initCollider();
+}
+
+void Collider::initCollider(){}
+
+void Collider::updateCollider(){
+  isCollided();  
+}
+
+collisionLayer Collider::giveCollisionLayer(){
+  
+}
+
+bool Collider::isCollided(){
+  if(const std::optional col = entity.getEntityBounds().findIntersection(tilemap.getTilemapBounds())){
+    collided = true;
+  } else{
+    collided = false;
+  }
+  return collided;
 }
