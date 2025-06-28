@@ -31,24 +31,23 @@ public:
   Entity();
   void initEntity();
   void updateEntity(float dt, bool collided);
-  sf::FloatRect getEntityBounds();
 
 public:
   void setMask();
+  sf::FloatRect getEntityBounds();
   std::vector<EntityCollisionLayer> EntityMask;
   std::vector<EntityCollisionLayer> getMask();
+  EntityCollisionLayer ecl;
 
 
 private:
   void move();
   void gravity();
-  virtual void resloveCollision(bool isCollided); 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
   
 private:
   data d;
   texture tex;
-  EntityCollisionLayer ecl;
   TextureManger tm;
   sf::Texture entityTexture;
   sf::Sprite entitySprite;

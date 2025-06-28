@@ -34,7 +34,7 @@ const bool Game::isRunning(){
 void Game::updateGame(){
   handlePollEvents();
   float dt = clock.restart().asSeconds();
-  collided = collider.isCollided();
+  collided = mapCollider.EntityWithTilemapCollision();
   entity.updateEntity(dt, collided);
 }
 

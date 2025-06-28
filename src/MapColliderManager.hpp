@@ -1,14 +1,14 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <algorithm>
 
 #include "entity.hpp"
 #include "tilemap.hpp"
 
 class MapCollider{
 public:
-  void initMapCollider();
-  bool isCollided();
+  bool EntityWithTilemapCollision();
 
 private:
   sf::FloatRect getEntityBounds;
