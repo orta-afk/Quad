@@ -21,12 +21,23 @@ struct texture {
   unsigned int size = 16;
 };
 
+enum class EntityCollisionLayer : int{
+  sprite = 0,
+  gun = 1,
+};
+
 class Entity : public sf::Drawable {
 public:
   Entity();
   void initEntity();
   void updateEntity(float dt, bool collided);
   sf::FloatRect getEntityBounds();
+
+public:
+  void setMask();
+  std::vector<EntityCollisionLayer> EntityMask;
+  std::vector<EntityCollisionLayer> getMask();
+
 
 private:
   void move();
@@ -37,6 +48,7 @@ private:
 private:
   data d;
   texture tex;
+  EntityCollisionLayer ecl;
   TextureManger tm;
   sf::Texture entityTexture;
   sf::Sprite entitySprite;

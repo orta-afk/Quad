@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include <vector>
 
 Entity::Entity() : entitySprite(entityTexture){
   initEntity();
@@ -34,6 +35,22 @@ void Entity::resloveCollision(bool isCollided) {
   } else {
     d.onGround = false;
   }
+}
+
+void Entity::setMask(){
+  EntityMask.clear();
+  switch(ecl){
+    case EntityCollisionLayer::sprite:
+      EntityMask = {EntityCollisionLayer::sprite};
+      break;
+    case EntityCollisionLayer::gun:
+      EntityMask = {EntityCollisionLayer::gun};
+      break;
+  }
+}
+
+std::vector<EntityCollisionLayer> Entity::getMask(){
+  return EntityMask;
 }
 
 void Entity::updateEntity(float dt, bool collided) {

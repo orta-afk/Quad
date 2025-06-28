@@ -12,7 +12,7 @@ enum class tiles : int{
 };
 
 
-enum class tileMask : int{
+enum class tileLayer : int{
   background = 0,
   ground = 1,
 };
@@ -26,7 +26,7 @@ public:
 public:
   sf::FloatRect getTilemapBounds();
   void setMask();
-  tileMask getMask(int x, int y);
+  tileLayer getMask(int x, int y);
 
 private:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -36,11 +36,11 @@ private:
   static const int mapHeight = 30;
   const int tileSize = 16;
   std::array<std::array<int, mapHeight>, mapWidth> map;
-  std::array<std::array<tileMask, mapHeight>, mapWidth> tileMasks;
+  std::array<std::array<tileLayer, mapHeight>, mapWidth> tileMasks;
   sf::VertexArray vert;
   sf::Texture* tilemapTexture;
 
 private:
   TextureManger tm;
-   tileMask mt;
+  tileLayer tl;
 };

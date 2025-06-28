@@ -22,23 +22,22 @@ sf::FloatRect Tilemap::getTilemapBounds(){
   return sf::FloatRect({0,0},{static_cast<float>(tileSize*mapWidth), static_cast<float>(tileSize*mapHeight)});
 }
 
-void Tilemap::setMask(){
-  for(int i = 0; i < mapWidth; i++){
-    for(int j = 0; j < mapHeight; j++){
-      int index = map[i][j];
-      switch (static_cast<tiles>(index)) {
-        case tiles::background:
-          index = static_cast<int>(tileMask::background);
-          break;
-        case tiles::ground:
-          index = static_cast<int>(tileMask::ground);
-          break;
+void Tilemap::setMask() {
+  for (int i = 0; i < mapWidth; i++) {
+    for (int j = 0; j < mapHeight; j++) {
+      switch (static_cast<tiles>(map[i][j])) {
+      case tiles::background:
+        tileMasks[i][j] = tileLayer::background;
+        break;
+      case tiles::ground:
+        tileMasks[i][j]= tileLayer::ground;
+        break;
       }
     }
   }
 }
 
-tileMask Tilemap::getMask(int x, int y) {
+tileLayer Tilemap::getMask(int x, int y) {
   if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) {
     return tileMasks[x][y];
   }
