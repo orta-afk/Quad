@@ -3,7 +3,6 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "SFML/Graphics/Rect.hpp"
 #include "tilemap.hpp"
 #include "entity.hpp"
 #include "collisionLayers.hpp"

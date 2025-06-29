@@ -39,8 +39,9 @@ void Entity::resloveCollision(bool collided){
 
 void Entity::updateEntity(float dt, bool collided) {
   resloveCollision(collided);
-  gravity();
+  gravity(dt);
   move();
+  jump(dt);
   d.position += d.velocity * dt;
   entitySprite.setPosition(d.position);
 }
@@ -65,12 +66,21 @@ sf::Vector2f Entity::getPosition(){
   return d.position;
 }
 
-void Entity::gravity() {
+void Entity::gravity(float dt) {
   if (!d.onGround) {
-    d.velocity.y += d.g;
+    d.velocity.y += d.g * dt;
     if (d.velocity.y > d.max_g) {
       d.velocity.y = d.max_g;
     }
+  }
+}
+
+void Entity::jump(float dt){
+  if(d.onGround &&sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
+    d.velocity.y -= d.jumpHeight;
+    d.canJump = false;
+  }else{
+    d.canJump = true;
   }
 }
 
@@ -81,10 +91,6 @@ void Entity::move() {
     d.velocity.x = d.speed;
   } else {
     d.velocity.x = 0;
-  }
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-    d.velocity.y = -d.speed;
   }
 }
 

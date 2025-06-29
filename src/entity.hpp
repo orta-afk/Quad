@@ -9,9 +9,11 @@
 #include "collisionLayers.hpp"
 
 struct data {
-  int g = 120;
-  int max_g = 300;
-  int speed = 100;
+  int g = 700;           
+  int max_g = 1400;       
+  int speed = 340;        
+  int jumpHeight = 300;
+  bool canJump;
   bool onGround = false;
   sf::Vector2f velocity;
   sf::Vector2f position;
@@ -33,7 +35,8 @@ public:
 
 private:
   void move();
-  void gravity();
+  void jump(float dt);
+  void gravity(float dt);
   void resloveCollision(bool collided);
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

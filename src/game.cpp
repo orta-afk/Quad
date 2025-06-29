@@ -1,9 +1,8 @@
 #include "game.hpp"
-#include "collision.hpp"
 
 Game::Game() : window(nullptr), collider(entity, tilemap){
-  win.width = 720;
-  win.height = 480;
+  win.width = 1280;
+  win.height = 720;
   win.title = "Quad";
   initWindow();
   initStuff();
@@ -16,6 +15,7 @@ void Game::initWindow(){
   sf::Vector2i centeredPosition(desktopMode.size.x / 2 - windowSize.x / 2,
                                 desktopMode.size.y / 2 - windowSize.y / 2);
   window->setPosition(centeredPosition);
+  window->setVerticalSyncEnabled(true);
 }
 
 void Game::initStuff(){

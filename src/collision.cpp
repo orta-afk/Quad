@@ -1,6 +1,4 @@
 #include "collision.hpp"
-#include "SFML/System/Vector2.hpp"
-#include "collisionLayers.hpp"
 
 void Collider::initCollider() {
   entity.setEntityCollisionLayer(collisionLayer::entity);
@@ -13,9 +11,6 @@ void Collider::initCollider() {
 
   entityMask = entity.getEntityCollisionMask();
   tilemapMask = tilemap.getTilemapCollisionMask();  
-
-  entityBounds = entity.getEntityBounds();
-  tilemapBounds = tilemap.getTilemapBounds();
 }
 
 bool Collider::TilemapAndEntity(){

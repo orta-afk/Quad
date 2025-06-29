@@ -28,8 +28,8 @@ public:
   std::vector<collisionLayer> getTilemapCollisionMask();
 
 private:
-  static const int mapWidth = 40;
-  static const int mapHeight = 30;
+  static const int mapWidth = 80;
+  static const int mapHeight = 45;
   const int tileSize = 16;
   std::array<std::array<int, mapHeight>, mapWidth> map;
   std::vector<collisionLayer> tilemapCollisionMask;

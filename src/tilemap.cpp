@@ -1,5 +1,4 @@
 #include "tilemap.hpp"
-#include "collisionLayers.hpp"
 
 Tilemap::Tilemap() : vert(sf::PrimitiveType::Triangles, 3){
   initTilemap();
@@ -10,7 +9,7 @@ void Tilemap::initTilemap(){
   tilemapTexture = &tm.loadFullTexture("../assets/tileset.png");
   for (int i = 0; i < mapWidth; ++i) {
     for (int j = 0; j < mapHeight; ++j) {
-      if (j >= 25 && j <= 26 && i >= 4 && i <= 36) {
+      if (j >= 40 && j <= 42 && i >= 10 && i <= 70) {
         map[i][j] = static_cast<int>(tiles::ground);
       } else {
         map[i][j] = static_cast<int>(tiles::background);
