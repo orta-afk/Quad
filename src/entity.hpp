@@ -2,9 +2,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <vector>
 #include <cmath>
 
 #include "spriteLoader.hpp"
+#include "collisionLayers.hpp"
 
 struct data {
   int g = 120;
@@ -21,34 +23,33 @@ struct texture {
   unsigned int size = 16;
 };
 
-enum class EntityCollisionLayer : int{
-  sprite = 0,
-  gun = 1,
-};
 
 class Entity : public sf::Drawable {
 public:
   Entity();
   void initEntity();
   void updateEntity(float dt, bool collided);
-
-public:
-  void setMask();
   sf::FloatRect getEntityBounds();
-  std::vector<EntityCollisionLayer> EntityMask;
-  std::vector<EntityCollisionLayer> getMask();
-  EntityCollisionLayer ecl;
-
 
 private:
   void move();
   void gravity();
+  void resloveCollision(bool collided);
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+public:
+  sf::Vector2f getPosition();
+  void setEntityCollisionLayer(collisionLayer entitycl);
+  void setEntityCollisionMask(std::vector<collisionLayer> entityMask);
+  collisionLayer getEntityCollisionLayer();
+  std::vector<collisionLayer> getEntityCollisionMask();
   
 private:
   data d;
   texture tex;
   TextureManger tm;
+  collisionLayer cl;
   sf::Texture entityTexture;
   sf::Sprite entitySprite;
+  std::vector<collisionLayer> entityCollisionMask;
 };

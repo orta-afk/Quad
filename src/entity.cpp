@@ -1,5 +1,4 @@
 #include "entity.hpp"
-#include <vector>
 
 Entity::Entity() : entitySprite(entityTexture){
   initEntity();
@@ -25,9 +24,10 @@ sf::FloatRect Entity::getEntityBounds() {
   return entitySprite.getGlobalBounds();
 }
 
-void Entity::resloveCollision(bool isCollided) {
-  if (isCollided) {
-    if (d.velocity.y > 0) {
+
+void Entity::resloveCollision(bool collided){
+  if(collided){
+  if (d.velocity.y > 0) {
       d.velocity.y = 0;
       d.position.y = std::floor(d.position.y / tex.size) * tex.size;
     }
@@ -37,28 +37,32 @@ void Entity::resloveCollision(bool isCollided) {
   }
 }
 
-void Entity::setMask(){
-  EntityMask.clear();
-  switch(ecl){
-    case EntityCollisionLayer::sprite:
-      EntityMask = {EntityCollisionLayer::sprite};
-      break;
-    case EntityCollisionLayer::gun:
-      EntityMask = {EntityCollisionLayer::gun};
-      break;
-  }
-}
-
-std::vector<EntityCollisionLayer> Entity::getMask(){
-  return EntityMask;
-}
-
 void Entity::updateEntity(float dt, bool collided) {
+  resloveCollision(collided);
   gravity();
   move();
   d.position += d.velocity * dt;
   entitySprite.setPosition(d.position);
-  resloveCollision(collided);
+}
+
+void Entity::setEntityCollisionLayer(collisionLayer entitycl){
+  cl = entitycl; 
+}
+
+void Entity::setEntityCollisionMask(std::vector<collisionLayer> entityMask){
+  entityCollisionMask = entityMask;
+}
+
+collisionLayer Entity::getEntityCollisionLayer(){
+  return cl;
+}
+
+std::vector<collisionLayer> Entity::getEntityCollisionMask(){
+  return entityCollisionMask;
+}
+
+sf::Vector2f Entity::getPosition(){
+  return d.position;
 }
 
 void Entity::gravity() {

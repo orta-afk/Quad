@@ -1,6 +1,7 @@
 #include "game.hpp"
+#include "collision.hpp"
 
-Game::Game() : window(nullptr){
+Game::Game() : window(nullptr), collider(entity, tilemap){
   win.width = 720;
   win.height = 480;
   win.title = "Quad";
@@ -18,8 +19,8 @@ void Game::initWindow(){
 }
 
 void Game::initStuff(){
-  entity.initEntity();  
   collider.initCollider();
+  entity.initEntity();  
   tilemap.initTilemap();
   tilemap.makeTile();
 }
@@ -33,8 +34,8 @@ const bool Game::isRunning(){
 
 void Game::updateGame(){
   handlePollEvents();
+  collided = collider.TilemapAndEntity();
   float dt = clock.restart().asSeconds();
-  collided = mapCollider.EntityWithTilemapCollision();
   entity.updateEntity(dt, collided);
 }
 

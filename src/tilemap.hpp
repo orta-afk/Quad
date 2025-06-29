@@ -5,16 +5,11 @@
 #include <array>
 
 #include "spriteLoader.hpp"
+#include "collisionLayers.hpp"
 
 enum class tiles : int{
   ground = 0,
   background = 2,
-};
-
-
-enum class tileLayer : int{
-  background = 0,
-  ground = 1,
 };
 
 class Tilemap : public sf::Drawable, public sf::Transform {
@@ -22,25 +17,26 @@ public:
   Tilemap();
   void initTilemap();
   void makeTile();
+  sf::FloatRect getTilemapBounds();
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 public:
-  sf::FloatRect getTilemapBounds();
-  void setMask();
-  tileLayer getMask(int x, int y);
-
-private:
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  int getTilemap(int x, int y);
+  void setCollisionLayer(collisionLayer tilemapcl);
+  void setCollisionMask(std::vector<collisionLayer> tilemapMask);
+  collisionLayer getTilemapCollisionLayer();
+  std::vector<collisionLayer> getTilemapCollisionMask();
 
 private:
   static const int mapWidth = 40;
   static const int mapHeight = 30;
   const int tileSize = 16;
   std::array<std::array<int, mapHeight>, mapWidth> map;
-  std::array<std::array<tileLayer, mapHeight>, mapWidth> tileMasks;
+  std::vector<collisionLayer> tilemapCollisionMask;
   sf::VertexArray vert;
   sf::Texture* tilemapTexture;
 
 private:
+  collisionLayer clt;
   TextureManger tm;
-  tileLayer tl;
 };

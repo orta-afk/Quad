@@ -6,8 +6,7 @@
 
 #include "entity.hpp"
 #include "tilemap.hpp"
-#include "collider.hpp"
-#include "MapColliderManager.hpp"
+#include "collision.hpp"
 
 struct windowData{
   std::string title;
@@ -41,5 +40,4 @@ private:
   Entity entity;
   Tilemap tilemap;
   Collider collider;
-  MapCollider mapCollider;
 };
